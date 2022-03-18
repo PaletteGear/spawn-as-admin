@@ -55,9 +55,10 @@ module.exports = function spawnAsAdmin (command, args = [], options = {}) {
 
   const spawnResult = binding.spawnAsAdmin(command, args, (exitCode) => {
     if (!result) {
-      throw new Error(`Failed to get result from ${command} , returned ${exitCode}`)
+      console.log(`spawnAsAdmin returned ${exitCode}`)
+    } else {
+      result.emit('exit', exitCode)
     }
-    result.emit('exit', exitCode)
   }, options && options.testMode)
 
   if (!spawnResult) {
