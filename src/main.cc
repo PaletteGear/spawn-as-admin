@@ -62,7 +62,10 @@ void SpawnAsAdmin(const Nan::FunctionCallbackInfo<Value>& info) {
   if (info[3]->IsTrue()) test_mode = true;
 
   ChildProcess child_process = spawn_as_admin::StartChildProcess(command, args, test_mode);
-  if (child_process.pid == -1) return;
+  if (child_process.pid == -1) {
+    Nan::ThrowError("Child Process could not be created");
+    return;
+  }
 
   Local<Object> result = Nan::New<Object>();
   result->Set(Nan::GetCurrentContext(), Nan::New("pid").ToLocalChecked(), Nan::New<Integer>(child_process.pid));
