@@ -31,9 +31,11 @@ function getAdminProcessClass () {
         this.stderr = null
         this.stdio = [this.stdin, this.stdout, this.stderr]
 
-        this.stdout.on('error', (error) => {
-          if (error.code !== 'EBADF') throw error
-        })
+        if (this.stdout) {
+          this.stdout.on('error', (error) => {
+            if (error.code !== 'EBADF') throw error
+          })
+        }
       }
 
       kill (signal) {
