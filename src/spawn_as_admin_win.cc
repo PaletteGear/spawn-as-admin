@@ -70,7 +70,7 @@ ChildProcess StartChildProcess(const std::string& command, const std::vector<std
 
   int pid = GetProcessId(shell_execute_info.hProcess);
 
-  return {shell_execute_info.hProcess, pid, 0, 0};
+  return {shell_execute_info.hProcess, pid, -1, -1};
 }
 
 int WaitForChildProcessToExit(ChildProcess *child_process, bool test_mode) {
