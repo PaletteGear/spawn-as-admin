@@ -26,14 +26,16 @@ function getAdminProcessClass () {
       constructor (pid, stdinFD, stdoutFD) {
         super()
         this.pid = pid
-        this.stdin = stdinFD ? fs.createWriteStream(null, {fd: stdinFD}) : null
-        this.stdout = stdoutFD ? fs.createReadStream(null, {fd: stdoutFD}) : null
+        this.stdin = (stdinFD >= 0) ? fs.createWriteStream(null, {fd: stdinFD}) : null
+        this.stdout = (stdoutFD >= 0) ? fs.createReadStream(null, {fd: stdoutFD}) : null
         this.stderr = null
         this.stdio = [this.stdin, this.stdout, this.stderr]
 
-        this.stdout.on('error', (error) => {
-          if (error.code !== 'EBADF') throw error
-        })
+        if (this.stdout) {
+          this.stdout.on('error', (error) => {
+            if (error.code !== 'EBADF') throw error
+          })
+        }
       }
 
       kill (signal) {
@@ -54,7 +56,11 @@ module.exports = function spawnAsAdmin (command, args = [], options = {}) {
   let result = null
 
   const spawnResult = binding.spawnAsAdmin(command, args, (exitCode) => {
-    result.emit('exit', exitCode)
+    if (!result) {
+      console.log(`spawnAsAdmin returned ${exitCode}`)
+    } else {
+      result.emit('exit', exitCode)
+    }
   }, options && options.testMode)
 
   if (!spawnResult) {
