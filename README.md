@@ -1,7 +1,5 @@
 # spawn-as-admin
 
-[![CI](https://github.com/atom/spawn-as-admin/actions/workflows/ci.yml/badge.svg)](https://github.com/atom/spawn-as-admin/actions/workflows/ci.yml)
-
 Run commands with administrator privileges
 
 ## Installing
